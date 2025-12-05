@@ -24,6 +24,13 @@ from rez.config import config
 from rez.resolved_context import ResolvedContext
 from rez.version import Version
 
+# ---- 新增兼容函数 ----
+def get_family_by_name(family_name):
+    for family in packages.iter_package_families():
+        if family.name == family_name:
+            return family
+    return None
+
 
 class PackageWorker(QThread):
     """后台加载包的线程"""
@@ -124,7 +131,7 @@ class PackageBrowserTab(QWidget):
         """选中包时显示详情"""
         pkg_name = item.text()
         try:
-            family = packages.get_package_family(pkg_name)
+            family = get_family_by_name(pkg_name)
             if family:
                 self.show_package_details(family)
         except Exception as e:
